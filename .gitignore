@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+*.db
+.env
+venv/
+env/
+
+# Flutter/Dart
+.dart_tool/
+build/
+.pub-cache/
+.packages
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Custom project files
+files.zip

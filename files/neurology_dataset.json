@@ -1,0 +1,167 @@
+{
+  "_disclaimer": "PROOF OF CONCEPT DATASET. Every node below reflects widely-taught, textbook-level clinical associations for common/well-known neurological conditions, included to demonstrate the system architecture. This has NOT been reviewed by a licensed clinician and must not be used for real diagnostic purposes until it is. Verify against a primary source (see 'source' field) before any production use.",
+  "diseases": [
+    {
+      "id": "parkinsons_disease",
+      "name_clinical": "Parkinson's Disease",
+      "name_plain": "Parkinson's Disease",
+      "pathognomonic_symptoms": ["resting_tremor", "bradykinesia", "rigidity"],
+      "supporting_symptoms": ["postural_instability", "shuffling_gait"],
+      "variants": [
+        { "name": "Tremor-dominant", "notes": "Resting tremor is the most prominent early feature." },
+        { "name": "Postural instability/gait-difficulty dominant", "notes": "Balance and gait issues predominate over tremor." }
+      ],
+      "treatments": ["Levodopa/carbidopa", "Dopamine agonists", "Physical therapy", "Deep brain stimulation (advanced cases)"],
+      "source": "General neurology textbook consensus (e.g. Adams and Victor's Principles of Neurology) — verify against current clinical guidelines.",
+      "clinical_review_status": "unreviewed"
+    },
+    {
+      "id": "essential_tremor",
+      "name_clinical": "Essential Tremor",
+      "name_plain": "Essential Tremor",
+      "pathognomonic_symptoms": ["action_tremor"],
+      "supporting_symptoms": [],
+      "variants": [
+        { "name": "Classic ET", "notes": "Action tremor, often hands, may improve with alcohol." }
+      ],
+      "treatments": ["Propranolol", "Primidone", "Deep brain stimulation (severe cases)"],
+      "source": "General neurology textbook consensus — verify against current clinical guidelines.",
+      "clinical_review_status": "unreviewed"
+    },
+    {
+      "id": "ischemic_stroke",
+      "name_clinical": "Ischemic Stroke",
+      "name_plain": "Stroke (clot-related)",
+      "pathognomonic_symptoms": ["sudden_onset", "unilateral_weakness", "facial_droop", "slurred_speech"],
+      "supporting_symptoms": ["numbness_one_side", "vision_loss_one_eye"],
+      "variants": [
+        { "name": "Anterior circulation stroke", "notes": "Affects face/arm/speech predominantly." },
+        { "name": "Posterior circulation stroke", "notes": "May present with vertigo, double vision, ataxia." }
+      ],
+      "treatments": ["EMERGENCY: call emergency services immediately", "tPA (time-critical, within window)", "Thrombectomy (time-critical)", "Post-stroke rehabilitation"],
+      "source": "FAST stroke recognition criteria, widely published by stroke associations (e.g. American Stroke Association) — verify against current guidelines.",
+      "clinical_review_status": "unreviewed"
+    },
+    {
+      "id": "migraine",
+      "name_clinical": "Migraine",
+      "name_plain": "Migraine",
+      "pathognomonic_symptoms": ["throbbing_headache_unilateral", "visual_aura"],
+      "supporting_symptoms": ["nausea_with_headache", "light_sensitivity", "sound_sensitivity", "headache"],
+      "variants": [
+        { "name": "Migraine with aura", "notes": "Visual or sensory aura precedes/accompanies headache." },
+        { "name": "Migraine without aura", "notes": "No aura; most common type." }
+      ],
+      "treatments": ["Triptans", "NSAIDs", "Preventive medications (beta-blockers, anticonvulsants, CGRP inhibitors)", "Lifestyle/trigger management"],
+      "source": "International Classification of Headache Disorders (ICHD-3) — verify against current criteria.",
+      "clinical_review_status": "unreviewed"
+    },
+    {
+      "id": "subarachnoid_hemorrhage",
+      "name_clinical": "Subarachnoid Hemorrhage",
+      "name_plain": "Sudden severe bleeding around the brain",
+      "pathognomonic_symptoms": ["severe_headache_worst_ever", "sudden_onset"],
+      "supporting_symptoms": ["neck_stiffness", "nausea_with_headache"],
+      "variants": [
+        { "name": "Aneurysmal SAH", "notes": "Most common cause; ruptured cerebral aneurysm." }
+      ],
+      "treatments": ["EMERGENCY: call emergency services immediately", "Neurosurgical evaluation", "Aneurysm clipping or coiling"],
+      "source": "General neurology/neurosurgery textbook consensus — verify against current guidelines.",
+      "clinical_review_status": "unreviewed"
+    },
+    {
+      "id": "epilepsy_generalized",
+      "name_clinical": "Generalized Epilepsy (tonic-clonic)",
+      "name_plain": "Epilepsy (convulsive seizures)",
+      "pathognomonic_symptoms": ["seizure_convulsive", "post_seizure_confusion"],
+      "supporting_symptoms": [],
+      "variants": [
+        { "name": "Tonic-clonic seizures", "notes": "Classic convulsive seizure type." }
+      ],
+      "treatments": ["Anticonvulsant medication (e.g. levetiracetam, valproate)", "EEG evaluation", "Seizure safety planning"],
+      "source": "General neurology textbook consensus — verify against current guidelines.",
+      "clinical_review_status": "unreviewed"
+    },
+    {
+      "id": "epilepsy_absence",
+      "name_clinical": "Absence Epilepsy",
+      "name_plain": "Epilepsy (brief staring spells)",
+      "pathognomonic_symptoms": ["seizure_staring_episode"],
+      "supporting_symptoms": [],
+      "variants": [
+        { "name": "Childhood absence epilepsy", "notes": "Brief staring episodes, often in children, no post-episode confusion." }
+      ],
+      "treatments": ["Ethosuximide", "Valproate", "EEG evaluation"],
+      "source": "General neurology textbook consensus — verify against current guidelines.",
+      "clinical_review_status": "unreviewed"
+    },
+    {
+      "id": "alzheimers_disease",
+      "name_clinical": "Alzheimer's Disease",
+      "name_plain": "Alzheimer's Disease (memory-loss dementia)",
+      "pathognomonic_symptoms": ["memory_loss_gradual"],
+      "supporting_symptoms": ["confusion_gradual", "difficulty_word_finding", "personality_change"],
+      "variants": [
+        { "name": "Early-onset", "notes": "Onset before age 65, less common." },
+        { "name": "Late-onset", "notes": "Onset after age 65, most common form." }
+      ],
+      "treatments": ["Cholinesterase inhibitors (e.g. donepezil)", "Memantine", "Anti-amyloid therapies (specialist-guided)", "Supportive/caregiver planning"],
+      "source": "General neurology textbook consensus — verify against current clinical guidelines.",
+      "clinical_review_status": "unreviewed"
+    },
+    {
+      "id": "multiple_sclerosis",
+      "name_clinical": "Multiple Sclerosis",
+      "name_plain": "Multiple Sclerosis (MS)",
+      "pathognomonic_symptoms": ["vision_problems_intermittent", "numbness_tingling_limbs"],
+      "supporting_symptoms": ["fatigue_worsens_with_activity", "double_vision", "unilateral_weakness"],
+      "variants": [
+        { "name": "Relapsing-remitting MS", "notes": "Most common form; distinct relapses with recovery." },
+        { "name": "Primary progressive MS", "notes": "Steady worsening from onset, no distinct relapses." }
+      ],
+      "treatments": ["Disease-modifying therapies (e.g. interferons, ocrelizumab)", "Corticosteroids for relapses", "Physical therapy"],
+      "source": "General neurology textbook consensus — verify against current McDonald criteria.",
+      "clinical_review_status": "unreviewed"
+    },
+    {
+      "id": "als",
+      "name_clinical": "Amyotrophic Lateral Sclerosis (ALS)",
+      "name_plain": "ALS (progressive muscle weakness disease)",
+      "pathognomonic_symptoms": ["muscle_weakness_progressive", "muscle_twitching", "muscle_wasting"],
+      "supporting_symptoms": ["swallowing_difficulty"],
+      "variants": [
+        { "name": "Limb-onset ALS", "notes": "Weakness begins in arms/legs." },
+        { "name": "Bulbar-onset ALS", "notes": "Speech/swallowing symptoms begin first." }
+      ],
+      "treatments": ["Riluzole", "Edaravone", "Multidisciplinary supportive care", "Respiratory support planning"],
+      "source": "General neurology textbook consensus — verify against current guidelines.",
+      "clinical_review_status": "unreviewed"
+    },
+    {
+      "id": "trigeminal_neuralgia",
+      "name_clinical": "Trigeminal Neuralgia",
+      "name_plain": "Trigeminal Neuralgia (severe facial nerve pain)",
+      "pathognomonic_symptoms": ["facial_pain_shock_like", "sensitivity_to_touch_face"],
+      "supporting_symptoms": [],
+      "variants": [
+        { "name": "Classic TN", "notes": "Typically due to vascular compression of the trigeminal nerve." }
+      ],
+      "treatments": ["Carbamazepine", "Oxcarbazepine", "Microvascular decompression surgery (refractory cases)"],
+      "source": "General neurology textbook consensus — verify against current guidelines.",
+      "clinical_review_status": "unreviewed"
+    },
+    {
+      "id": "bacterial_meningitis",
+      "name_clinical": "Bacterial Meningitis",
+      "name_plain": "Bacterial Meningitis (serious brain/spinal infection)",
+      "pathognomonic_symptoms": ["neck_stiffness", "fever_with_headache"],
+      "supporting_symptoms": ["headache", "nausea_with_headache"],
+      "variants": [
+        { "name": "Acute bacterial meningitis", "notes": "Medical emergency; rapid progression." }
+      ],
+      "treatments": ["EMERGENCY: call emergency services immediately", "IV antibiotics (empiric, urgent)", "Hospitalization"],
+      "source": "General infectious disease/neurology textbook consensus — verify against current guidelines.",
+      "clinical_review_status": "unreviewed"
+    }
+  ]
+}
