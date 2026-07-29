@@ -21,6 +21,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 import db
 import parser_service
@@ -36,6 +37,18 @@ app = FastAPI(
     title="Neurology Branching Tree",
     description="Local-first neurology symptom analysis — deterministic scoring, no cloud.",
     version="0.1.0",
+)
+
+# --- CORS ---
+# WARNING: allow_origins=["*"] is for LOCAL DEVELOPMENT ONLY.
+# Before any real deployment, lock this down to the specific origin(s)
+# serving the frontend (e.g. ["http://localhost:56780"]).
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
