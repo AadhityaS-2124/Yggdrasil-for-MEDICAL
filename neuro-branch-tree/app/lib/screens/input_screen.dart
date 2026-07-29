@@ -1,142 +1,89 @@
-/// Screen 1: Input screen — distraction-free search field.
-///
-/// Submitting navigates to TreeScreen where loading → results display happens.
+/// Mirrors backend/data/symptom_vocabulary.json for local autocomplete matching.
+/// IMPORTANT: Keep this list in sync with the backend's closed vocabulary.
+/// This is used ONLY for UI suggestion purposes — the actual parsing/validation
+/// still happens server-side via parser_service.py. This file does not enforce
+/// anything; it just helps the user know what the system can recognize.
+library;
 
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../state/query_provider.dart';
-import 'tree_screen.dart';
-
-class InputScreen extends ConsumerStatefulWidget {
-  const InputScreen({super.key});
-
-  @override
-  ConsumerState<InputScreen> createState() => _InputScreenState();
+class SymptomEntry {
+  final String tag;
+  final String plainLabel;
+  const SymptomEntry(this.tag, this.plainLabel);
 }
 
-class _InputScreenState extends ConsumerState<InputScreen> {
-  final _controller = TextEditingController();
-  bool _submitted = false;
+const List<SymptomEntry> kSymptomVocabulary = [
+  SymptomEntry('resting_tremor', 'Shaking that happens when the limb is at rest'),
+  SymptomEntry('action_tremor', 'Shaking that happens during movement'),
+  SymptomEntry('bradykinesia', 'Slowness of movement'),
+  SymptomEntry('rigidity', 'Muscle stiffness'),
+  SymptomEntry('postural_instability', 'Balance problems / falls'),
+  SymptomEntry('loss_of_balance', 'Difficulty balancing or walking steadily'),
+  SymptomEntry('shuffling_gait', 'Short, shuffling steps when walking'),
+  SymptomEntry('unilateral_weakness', 'Weakness on one side of the body'),
+  SymptomEntry('facial_droop', 'One side of the face drooping'),
+  SymptomEntry('slurred_speech', 'Difficulty speaking clearly'),
+  SymptomEntry('sudden_onset', 'Symptoms started suddenly'),
+  SymptomEntry('numbness_one_side', 'Numbness on one side of the body'),
+  SymptomEntry('vision_loss_one_eye', 'Vision loss or blurring in one eye'),
+  SymptomEntry('double_vision', 'Seeing double'),
+  SymptomEntry('severe_headache_worst_ever', "Sudden, extremely severe 'worst headache of my life'"),
+  SymptomEntry('headache', 'General headache'),
+  SymptomEntry('throbbing_headache_unilateral', 'Throbbing headache, usually one side'),
+  SymptomEntry('nausea_with_headache', 'Nausea or vomiting alongside headache'),
+  SymptomEntry('light_sensitivity', 'Sensitivity to light'),
+  SymptomEntry('sound_sensitivity', 'Sensitivity to sound'),
+  SymptomEntry('visual_aura', 'Visual disturbances (flashing lights, zigzag lines) before/during headache'),
+  SymptomEntry('seizure_convulsive', 'Convulsive seizure (shaking, loss of consciousness)'),
+  SymptomEntry('seizure_staring_episode', 'Brief staring spells / lapses in awareness'),
+  SymptomEntry('post_seizure_confusion', 'Confusion after an episode'),
+  SymptomEntry('memory_loss_gradual', 'Gradual, worsening memory loss'),
+  SymptomEntry('confusion_gradual', 'Gradual confusion or disorientation'),
+  SymptomEntry('personality_change', 'Noticeable change in personality or behavior'),
+  SymptomEntry('difficulty_word_finding', 'Trouble finding the right words'),
+  SymptomEntry('numbness_tingling_limbs', 'Numbness or tingling in arms/legs'),
+  SymptomEntry('vision_problems_intermittent', 'Vision problems that come and go'),
+  SymptomEntry('muscle_weakness_progressive', 'Progressively worsening muscle weakness'),
+  SymptomEntry('fatigue_worsens_with_activity', 'Fatigue that worsens with heat or exertion'),
+  SymptomEntry('muscle_twitching', 'Muscle twitching (fasciculations)'),
+  SymptomEntry('muscle_wasting', 'Visible muscle wasting'),
+  SymptomEntry('swallowing_difficulty', 'Difficulty swallowing'),
+  SymptomEntry('facial_pain_shock_like', 'Sudden shock-like facial pain'),
+  SymptomEntry('neck_stiffness', 'Stiff neck'),
+  SymptomEntry('fever_with_headache', 'Fever alongside headache'),
+  SymptomEntry('sensitivity_to_touch_face', 'Pain triggered by light touch to the face'),
+];
 
-  void _onSubmit() {
-    final text = _controller.text.trim();
-    if (text.isEmpty) return;
-    ref.read(queryProvider.notifier).submit(text);
-    _submitted = true;
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const TreeScreen()),
-    );
+/// Returns up to [limit] plain-language suggestions whose label contains any
+/// word from the current (partial) input, case-insensitive.
+/// Matches on the LAST word being typed, so mid-sentence typing still suggests
+/// relevantly rather than trying to match the whole string.
+List<SymptomEntry> matchSymptomSuggestions(String input, {int limit = 5}) {
+  final trimmed = input.trimRight();
+  if (trimmed.isEmpty) return [];
+
+  // Use the last "word-ish" fragment (letters only) as the match key, so
+  // "shaking at re" matches on "re" -> still weak, so also try last 2 words.
+  final words = trimmed.toLowerCase().split(RegExp(r'[\s,]+'));
+  final lastWord = words.isNotEmpty ? words.last : '';
+  final lastTwoWords = words.length >= 2
+      ? '${words[words.length - 2]} ${words.last}'
+      : lastWord;
+
+  if (lastWord.length < 2) return [];
+
+  final scored = <MapEntry<SymptomEntry, int>>[];
+  for (final entry in kSymptomVocabulary) {
+    final label = entry.plainLabel.toLowerCase();
+    final tag = entry.tag.toLowerCase();
+    int score = -1;
+    if (label.contains(lastTwoWords) || tag.contains(lastTwoWords.replaceAll(' ', '_'))) {
+      score = 2;
+    } else if (label.contains(lastWord) || tag.contains(lastWord)) {
+      score = 1;
+    }
+    if (score >= 0) scored.add(MapEntry(entry, score));
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // App title
-                Text(
-                  'Neurology\nBranching Tree',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.indigo.shade700,
-                    height: 1.2,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Describe symptoms in plain language',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey.shade500,
-                  ),
-                ),
-                const SizedBox(height: 32),
-
-                // Input field
-                TextField(
-                  key: const Key('symptom_input'),
-                  controller: _controller,
-                  decoration: InputDecoration(
-                    hintText: 'e.g., "shaking at rest, slow movement, stiffness"',
-                    hintStyle: TextStyle(
-                      color: Colors.grey.shade400,
-                      fontSize: 14,
-                    ),
-                    filled: true,
-                    fillColor: Colors.grey.shade50,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.grey.shade300),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.grey.shade300),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Colors.indigo.shade400, width: 2),
-                    ),
-                    contentPadding: const EdgeInsets.all(16),
-                  ),
-                  maxLines: 3,
-                  textInputAction: TextInputAction.done,
-                  onSubmitted: (_) => _onSubmit(),
-                ),
-                const SizedBox(height: 16),
-
-                // Submit button
-                SizedBox(
-                  width: double.infinity,
-                  height: 48,
-                  child: ElevatedButton(
-                    key: const Key('submit_button'),
-                    onPressed: _onSubmit,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.indigo.shade600,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: const Text(
-                      'Analyze',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Disclaimer
-                Text(
-                  'Local-only • No data leaves this device',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.grey.shade400,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  scored.sort((a, b) => b.value.compareTo(a.value));
+  return scored.take(limit).map((e) => e.key).toList();
 }
